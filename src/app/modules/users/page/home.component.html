@@ -1,0 +1,47 @@
+<main class="main-component">
+    <section class="header-component">
+        <h1>Users</h1>
+    </section>
+    <section class="content-component">
+        <button class="button button-primary" (click)="createUser()">Add New User</button>
+        <div class="table">
+          <div class="header-table">
+            <div class="show-entries">
+              <span>Show</span>
+              <select [(ngModel)]="pageSize">
+                <option [ngValue]="5">5</option>
+                <option [ngValue]="10">10</option>
+                <option [ngValue]="15">15</option>
+                <option [ngValue]="20">20</option>
+              </select>
+              <span>entries</span>
+            </div>
+            <div class="search-bar">
+              <span>Search:</span>
+              <input type="text" [(ngModel)]="searchString" (ngModelChange)="search($event)">
+            </div>
+          </div>
+          <nz-table #sortTable [nzBordered]="true" [nzData]="displayedUsers" nzTableLayout="fixed" [nzPageSize]="pageSize">
+            <thead>
+              <tr>
+                <th *ngFor="let column of listOfColumn" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">
+                  {{ column.title }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of sortTable.data; trackBy: identify; index as i">
+                <td>{{ data.id }}</td>
+                <td>{{ data.email }}</td>
+                <td>{{ data.username }}</td>
+                <td class="actions">
+                  <button class="button-action-table button-action-default" (click)="viewUser(data)"><span nz-icon nzType="eye" nzTheme="outline"></span></button>
+                  <button class="button-action-table button-action-warning" (click)="editUser(data, i)"><span nz-icon nzType="edit" nzTheme="outline"></span></button>
+                  <button class="button-action-table button-action-danger" (click)="removeUser(data)"><span nz-icon nzType="delete" nzTheme="outline"></span></button>
+                </td>
+              </tr>
+            </tbody>
+        </nz-table>
+        </div>
+    </section>
+</main>

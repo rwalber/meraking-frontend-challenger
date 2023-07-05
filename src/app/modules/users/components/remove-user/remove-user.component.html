@@ -1,0 +1,9 @@
+<section>
+    <div class="modal-body">
+        <p>Are you sure you want to remove the user <b>{{ user?.username }}</b>?</p>
+    </div>
+    <div class="modal-buttons">
+        <button class="button-action-danger" (click)="confirmeRemove()">Remove</button>
+        <button class="button-action-cancel" (click)="closeModal()">Cancel</button>
+    </div>
+</section>
