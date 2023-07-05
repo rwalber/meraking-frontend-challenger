@@ -3,7 +3,10 @@
         <h1>Users</h1>
     </section>
     <section class="content-component">
-        <button class="button button-primary" (click)="createUser()">Add New User</button>
+        <div class="row-buttons">
+          <button class="button button-action-default" (click)="createUser()">Add New User</button>
+          <button class="button button-action-cancel" (click)="getRandomUsers()">Get Random Users</button>
+        </div>
         <div class="table">
           <div class="header-table">
             <div class="show-entries">
@@ -18,10 +21,10 @@
             </div>
             <div class="search-bar">
               <span>Search:</span>
-              <input type="text" [(ngModel)]="searchString" (ngModelChange)="search($event)">
+              <input type="text" [(ngModel)]="searchString" (ngModelChange)="detectSearchClean($event)" (keyup.enter)="search()">
             </div>
           </div>
-          <nz-table #sortTable [nzBordered]="true" [nzData]="displayedUsers" nzTableLayout="fixed" [nzPageSize]="pageSize">
+          <nz-table #sortTable [nzLoading]="loadingData" [nzBordered]="true" [nzData]="displayedUsers" nzTableLayout="fixed" [nzPageSize]="pageSize">
             <thead>
               <tr>
                 <th *ngFor="let column of listOfColumn" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">

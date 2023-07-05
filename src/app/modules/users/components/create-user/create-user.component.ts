@@ -1,4 +1,5 @@
 import { NzModalRef } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
@@ -12,7 +13,7 @@ export class CreateUserComponent implements OnInit {
   @Input() element!: number;
   userForm!: FormGroup;
 
-  constructor(private modal: NzModalRef, private fb: FormBuilder) {}
+  constructor(private modal: NzModalRef, private fb: FormBuilder, private notification: NzNotificationService) {}
 
   ngOnInit(): void {
     this.userForm = this.fb.group({
@@ -30,7 +31,7 @@ export class CreateUserComponent implements OnInit {
     if(this.userForm.valid) {
       this.modal.triggerOk();
     } else {
-      console.log(this.userForm.markAllAsTouched());
+      this.notification.error('Error', 'Please, fill all fields!');
     }
   }
 

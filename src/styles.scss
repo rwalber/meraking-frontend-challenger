@@ -67,13 +67,6 @@ form {
     cursor: pointer;
 }
 
-.button-primary {
-    background-color: var(--primary);
-    &:hover {
-        background-color: var(--primary-hover);
-    }
-}
-
 .button-action-table {
     @include flex-center();
     width: 2rem;

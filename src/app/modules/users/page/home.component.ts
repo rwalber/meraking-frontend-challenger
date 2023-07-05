@@ -1,4 +1,6 @@
 import { Users } from '../models/users.interface';
+import { mockUsers } from '../mock/users';
+import { UsersService } from '../services/users.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Component, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -38,86 +40,60 @@ export class HomeComponent implements OnInit {
     }
   ];
 
-  users: Users[] = [
-    {
-      id: 1,
-      email: 'walber@teste.com',
-      username: 'Walber'
-    },
-    {
-      id: 2,
-      email: 'fulano@teste.com',
-      username: 'Fulano'
-    },
-    {
-      id: 3,
-      email: 'cicrano@teste.com',
-      username: 'Cicrano'
-    },
-    {
-      id: 1,
-      email: 'walber@teste.com',
-      username: 'Walber'
-    },
-    {
-      id: 2,
-      email: 'fulano@teste.com',
-      username: 'Fulano'
-    },
-    {
-      id: 3,
-      email: 'cicrano@teste.com',
-      username: 'Cicrano'
-    },
-    {
-      id: 1,
-      email: 'walber@teste.com',
-      username: 'Walber'
-    },
-    {
-      id: 2,
-      email: 'fulano@teste.com',
-      username: 'Fulano'
-    },
-    {
-      id: 3,
-      email: 'cicrano@teste.com',
-      username: 'Cicrano'
-    },
-    {
-      id: 1,
-      email: 'walber@teste.com',
-      username: 'Walber'
-    },
-    {
-      id: 2,
-      email: 'fulano@teste.com',
-      username: 'Fulano'
-    },
-    {
-      id: 3,
-      email: 'cicrano@teste.com',
-      username: 'Cicrano'
-    },
-  ];
+  users: Users[] = [];
   displayedUsers: Users[] = [];
+  
+  loadingData: boolean = true;
 
   pageSize: number = 5;
   searchString: string = '';
 
-  constructor(private modalService: NzModalService, private notification: NzNotificationService) { }
+  constructor(private modalService: NzModalService, private notification: NzNotificationService, private service: UsersService) { }
 
   ngOnInit(): void {
+    this.users = mockUsers;
     this.displayedUsers = this.users;
+    this.loadingData = false;
   }
 
   identify(index: number, item: Users): number {
     return item.id;
   }
 
-  search(event: any): void {
+  search(): void {
     this.displayedUsers = this.users.filter((item) => {
-      return item.email.toLowerCase().includes(event.toLowerCase()) || item.username.toLowerCase().includes(event.toLowerCase());
+      return item.username.toLowerCase().includes(this.searchString.toLowerCase());
+    });
+  }
+
+  detectSearchClean(event: any): void {
+    if(event === '') {
+      this.displayedUsers = this.users;
+    }
+  }
+
+  getRandomUsers(): void {
+    this.loadingData = true;
+    this.service.getRandomUsers(this.pageSize*2, (status, response) => {
+      if(status) {
+        const randomUsers = response.map((item: any, index: number) => {
+          return {
+            id: item.location.street.number,
+            email: item.email,
+            username: `${item.name.first} ${item.name.last}`,
+          }
+        });
+        this.users = [...this.users, ...randomUsers];
+        this.displayedUsers = this.users;
+        this.notification.success('Success', 'Users loaded successfully', {
+          nzStyle: { backgroundColor: 'var(--background-notify)' },
+        });
+      } else {
+        this.notification.error('Error', 'Error fetching data in Random-API', {
+          nzStyle: { backgroundColor: 'var(--background-notify)' },
+        });
+      }
+      this.loadingData = false;
     });
   }
 
@@ -130,8 +106,9 @@ export class HomeComponent implements OnInit {
       nzComponentParams: { user: user },
       nzOnOk: (result) => {
         this.users = this.users.filter((item) => item.id !== result.user?.id);
+        this.displayedUsers = this.users;
         this.notification.success('Success', 'User removed successfully', {
-          nzStyle: { backgroundColor: '#ecebeb' },
+          nzStyle: { backgroundColor: 'var(--background-notify)' },
         });
       },
     });
@@ -146,8 +123,9 @@ export class HomeComponent implements OnInit {
       nzComponentParams: { element: this.users.length + 1 },
       nzOnOk: (result) => {
         this.users = [...this.users, result.userForm.value];
+        this.displayedUsers = this.users;
         this.notification.success('Success', 'User create successfully', {
-          nzStyle: { backgroundColor: '#ecebeb' },
+          nzStyle: { backgroundColor: 'var(--background-notify)' },
         });
       },
     });
@@ -177,8 +155,9 @@ export class HomeComponent implements OnInit {
           }
           return item;
         });
+        this.displayedUsers = this.users;
         this.notification.success('Success', 'User updated successfully', {
-          nzStyle: { backgroundColor: '#ecebeb' },
+          nzStyle: { backgroundColor: 'var(--background-notify)' },
         });
       },
     });

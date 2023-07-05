@@ -34,3 +34,14 @@
     }
 
 }
+
+.row-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    button {
+        margin-right: .5rem;
+    }
+}

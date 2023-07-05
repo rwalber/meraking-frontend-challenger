@@ -1,7 +1,8 @@
+import { Users } from '../../models/users.interface';
+import { NzModalRef } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzModalRef } from 'ng-zorro-antd/modal';
-import { Users } from '../../models/users.interface';
 
 @Component({
   selector: 'app-edit-user',
@@ -13,7 +14,7 @@ export class EditUserComponent implements OnInit {
   @Input() user!: Users;
   userForm!: FormGroup;
 
-  constructor(private modal: NzModalRef, private fb: FormBuilder) {}
+  constructor(private modal: NzModalRef, private fb: FormBuilder, private notification: NzNotificationService) {}
 
   ngOnInit(): void {
     this.userForm = this.fb.group({
@@ -31,7 +32,7 @@ export class EditUserComponent implements OnInit {
     if(this.userForm.valid) {
       this.modal.triggerOk();
     } else {
-      console.log(this.userForm.markAllAsTouched());
+      this.notification.error('Error', 'Please, fill all fields!');
     }
   }
 
