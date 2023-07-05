@@ -79,8 +79,6 @@ O projeto foi desenvolvido com o uso do framework Angular, versão 12. As biblio
 
 Walber Rocha - walber_jesus@hotmail.com
 
-Project Link: [https://github.com/rwalber/marvel-wiki](https://github.com/rwalber/marvel-wiki)
-
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
